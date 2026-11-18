@@ -83,8 +83,15 @@ const groups = computed(() => {
 		const filteredInterfaces = interfacesSorted.value.filter((inter) => (inter.group ?? 'other') === group);
 		if (!search.value) return filteredInterfaces;
 		const searchValue = search.value!.toLowerCase();
+		const currentInterface = fieldDetail.field.meta?.interface;
+
+		// Always keep the chosen interface visible, as the interface can be switched automatically
+		// (e.g. m2m → files when choosing directus_files), which would otherwise close the configuration
 		return filteredInterfaces.filter(
-			(inter) => inter.id.toLowerCase().includes(searchValue) || inter.name.toLowerCase().includes(searchValue),
+			(inter) =>
+				inter.id === currentInterface ||
+				inter.id.toLowerCase().includes(searchValue) ||
+				inter.name.toLowerCase().includes(searchValue),
 		);
 	}
 });
